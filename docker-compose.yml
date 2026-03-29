@@ -1,0 +1,31 @@
+services:
+  app:
+    build: .
+    container_name: lg_app
+    ports:
+      - '8000:8000'
+    volumes:
+      - .:/var/www
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=lg_factory
+      - DB_USERNAME=root
+      - DB_PASSWORD=root_password
+    depends_on:
+      - db
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  db:
+    image: mysql:8.0
+    container_name: lg_db
+    ports:
+      - '3307:3306'
+    environment:
+      - MYSQL_DATABASE=lg_factory
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - lg_db_data:/var/lib/mysql
+
+volumes:
+  lg_db_data:

@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Core\UseCases\GetProductionDashboard;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class ProductionController extends Controller
+{
+    public function index(Request $request, GetProductionDashboard $useCase)
+    {
+        $selectedLine = $request->get('linha', 'todas');
+        $search = $request->get('search');
+        $data = $useCase->execute($selectedLine);
+
+        // Filtra por busca se houver termo
+        if ($search) {
+            $data['dados'] = array_filter($data['dados'], function($item) use ($search) {
+                return stripos($item['linha'], $search) !== false;
+            });
+        }
+
+        $collection = collect($data['dados']);
+        $perPage = 10;
+        $currentPage = $request->get('page', 1);
+        $items = $collection->forPage($currentPage, $perPage);
+        $data['dados'] = new LengthAwarePaginator($items, $collection->count(), $perPage, $currentPage, [
+            'path' => $request->url(),
+            'pageName' => 'page'
+        ]);
+
+        $data['dados']->appends($request->query());
+
+        return view('dashboard', $data);
+    }
+}
