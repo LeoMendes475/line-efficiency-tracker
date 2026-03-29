@@ -1,0 +1,14 @@
+{
+  "name": "lg-production-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard de produção LG",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
