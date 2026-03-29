@@ -35,11 +35,11 @@ jobs:
     - name: Set permissions
       run: chmod -R 775 storage bootstrap/cache
 
-    - name: Generate application key
-      run: php artisan key:generate
-
     - name: Install Composer dependencies
       run: composer install --no-progress --prefer-dist --optimize-autoloader --no-scripts
+
+    - name: Generate application key
+      run: php artisan key:generate
 
     - name: Run tests
       run: php artisan test
