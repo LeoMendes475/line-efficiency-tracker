@@ -49,8 +49,3 @@ jobs:
 
     - name: Run tests
       run: php artisan test
-
-    - name: Build assets (optional)
-      run: |
-        npm install
-        npm run production
