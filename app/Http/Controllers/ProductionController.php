@@ -12,7 +12,6 @@ class ProductionController extends Controller
     {
         $selectedLines = $request->get('linha');
 
-        // Ensure $selectedLines is always an array
         if (is_null($selectedLines)) {
             $selectedLines = ['todas'];
         } elseif (!is_array($selectedLines)) {
