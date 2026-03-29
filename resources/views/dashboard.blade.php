@@ -319,10 +319,96 @@ tbody tr:hover td {
     background: var(--surface);
     border-color: var(--border);
 }
+
+/* ── Skeleton Loading ── */
+.skeleton {
+    background: linear-gradient(90deg, var(--border) 25%, rgba(48, 54, 61, 0.8) 50%, var(--border) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 8px;
+}
+
+.skeleton-text:last-child {
+    width: 60%;
+    margin-bottom: 0;
+}
+
+.skeleton-title {
+    height: 20px;
+    width: 150px;
+    margin-bottom: 12px;
+}
+
+.skeleton-row {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.skeleton-row:last-child {
+    border-bottom: none;
+}
+
+.skeleton-cell {
+    flex: 1;
+    height: 16px;
+}
+
+.skeleton-cell:nth-child(1) { width: 120px; }
+.skeleton-cell:nth-child(2) { width: 80px; }
+.skeleton-cell:nth-child(3) { width: 60px; }
+.skeleton-cell:nth-child(4) { flex: 1; }
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(1, 4, 9, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 </style>
 @endpush
 
 @section('content')
+
+<div id="loading-overlay" class="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
 
 <form method="GET" action="{{ route('dashboard') }}" class="search-bar" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center;">
     <input type="text" name="search" value="{{ request('search', '') }}" placeholder="Buscar linha específica..." class="search-input" style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; outline: none; min-width: 220px;">
@@ -351,7 +437,7 @@ tbody tr:hover td {
     </div>
 </div>
 
-<div class="cards-grid">
+<div class="cards-grid" id="cards-container">
     <div class="card" style="--card-accent: #f97316">
         <div class="card-icon">🏭</div>
         <div class="card-value">{{ $linhaSelecionada === 'todas' ? 'Todas' : $linhaSelecionada }}</div>
@@ -390,7 +476,7 @@ tbody tr:hover td {
             ● {{ $linhaSelecionada ?? 'Todas as linhas' }}
         </span>
     </div>
-    <div class="table-wrap">
+    <div class="table-wrap" id="table-container">
         @if (!isset($dados) || empty($dados))
             <div class="empty">Nenhum dado encontrado para a seleção.</div>
         @else
@@ -438,5 +524,53 @@ tbody tr:hover td {
 </div>
 
 <p class="page-footer">Leonardo Mendes · {{ now()->format('d/m/Y') }}</p>
+
+<script>
+// Skeleton Loading Functions
+function showLoading() {
+    document.getElementById('loading-overlay').style.display = 'flex';
+}
+
+function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+}
+
+// Handle form submissions with loading
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle search form
+    const searchForm = document.querySelector('.search-bar');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            showLoading();
+        });
+    }
+
+    // Handle filter links
+    const filterLinks = document.querySelectorAll('.filter-btn[href]');
+    filterLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Only show loading for actual navigation (not clearing filters)
+            if (!this.classList.contains('clear-btn')) {
+                showLoading();
+            }
+        });
+    });
+
+    // Handle pagination links
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.pagination .page-link')) {
+            showLoading();
+        }
+    });
+
+    // Hide loading when page is fully loaded
+    window.addEventListener('load', function() {
+        hideLoading();
+    });
+
+    // Hide loading after a timeout as fallback
+    setTimeout(hideLoading, 10000);
+});
+</script>
 
 @endsection
