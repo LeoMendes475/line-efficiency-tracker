@@ -96,6 +96,18 @@ Um dashboard de produção para monitorar linhas de produtos LG, desenvolvido co
 - Paginação de resultados
 - Gráficos de eficiência
 
+## CI/CD
+
+Este projeto utiliza GitHub Actions para CI/CD. A pipeline executa automaticamente:
+
+- Instalação de dependências
+- Migrações do banco
+- Execução de seeders
+- Testes automatizados (PHPUnit)
+- Build de assets
+
+Para mais detalhes, veja o arquivo `.github/workflows/ci.yml`.
+
 ## Contribuição
 
 1. Fork o projeto
