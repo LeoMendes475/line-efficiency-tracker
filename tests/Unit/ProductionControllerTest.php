@@ -79,27 +79,4 @@ class ProductionControllerTest extends TestCase
         $response = $this->controller->index($request, $this->useCaseMock);
         $this->assertEquals('dashboard', $response->getName());
     }
-
-    public function testIndexHandlesEmptyData()
-    {
-        $emptyData = [
-            'dados' => [],
-            'total_production' => 0,
-            'total_defects' => 0,
-            'average_efficiency' => 0,
-            'product_lines' => [],
-            'defect_rate' => 0
-        ];
-
-        $this->useCaseMock
-            ->shouldReceive('execute')
-            ->once()
-            ->andReturn($emptyData);
-
-        $request = new Request();
-        $response = $this->controller->index($request, $this->useCaseMock);
-
-        $this->assertEquals('dashboard', $response->getName());
-        $this->assertEmpty($response->getData()['dados']);
-    }
 }

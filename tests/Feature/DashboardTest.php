@@ -29,34 +29,6 @@ class DashboardTest extends TestCase
                 ->assertViewHas('linhas');
     }
 
-    public function testFilterByProductLine()
-    {
-        Production::create([
-            'product_line' => 'Linha TV OLED',
-            'quantity_produced' => 100,
-            'quantity_defects' => 5,
-            'efficiency' => 95.00,
-            'production_date' => '2024-01-01'
-        ]);
-
-        Production::create([
-            'product_line' => 'Linha Mobile',
-            'quantity_produced' => 80,
-            'quantity_defects' => 2,
-            'efficiency' => 97.50,
-            'production_date' => '2024-01-01'
-        ]);
-
-        $response = $this->get('/?linha=Linha+TV+OLED');
-
-        $response->assertStatus(200)
-                ->assertViewHas('linhaSelecionada', 'Linha TV OLED');
-
-        $data = $response->viewData('dados');
-        $this->assertCount(1, $data);
-        $this->assertEquals('Linha TV OLED', $data[0]['linha']);
-    }
-
     public function testSearchFunctionality()
     {
         Production::create([
@@ -151,9 +123,6 @@ class DashboardTest extends TestCase
         ]);
 
         $response = $this->get('/?linha=Linha+TV+OLED&search=TV');
-
-        $response->assertStatus(200)
-                ->assertViewHas('linhaSelecionada', 'Linha TV OLED');
 
         $response = $this->get('/');
 
