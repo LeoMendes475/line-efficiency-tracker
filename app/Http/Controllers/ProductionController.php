@@ -10,11 +10,17 @@ class ProductionController extends Controller
 {
     public function index(Request $request, GetProductionDashboard $useCase)
     {
-        $selectedLine = $request->get('linha', 'todas');
+        $selectedLines = $request->get('linha', ['todas']);
         $search = $request->get('search');
+
+        if (in_array('todas', $selectedLines) || empty(array_filter($selectedLines))) {
+            $selectedLine = 'todas';
+        } else {
+            $selectedLine = $selectedLines;
+        }
+
         $data = $useCase->execute($selectedLine);
 
-        // Filtra por busca se houver termo
         if ($search) {
             $data['dados'] = array_filter($data['dados'], function($item) use ($search) {
                 return stripos($item['linha'], $search) !== false;

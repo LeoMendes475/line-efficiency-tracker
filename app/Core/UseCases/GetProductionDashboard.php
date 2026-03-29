@@ -13,7 +13,7 @@ class GetProductionDashboard
         $this->repository = $repository;
     }
 
-    public function execute(string $selectedLine = 'todas'): array
+    public function execute($selectedLine = 'todas'): array
     {
         $allReports = $this->repository->getAllProduction();
         $reports = $allReports;
@@ -23,9 +23,13 @@ class GetProductionDashboard
             $todasLinhas[$item->product_line] = true;
         }
 
-        if ($selectedLine !== 'todas') {
+        if ($selectedLine !== 'todas' && !is_array($selectedLine)) {
             $reports = array_filter($reports, function($report) use ($selectedLine) {
                 return $report->product_line === $selectedLine;
+            });
+        } elseif (is_array($selectedLine) && !in_array('todas', $selectedLine)) {
+            $reports = array_filter($reports, function($report) use ($selectedLine) {
+                return in_array($report->product_line, $selectedLine);
             });
         }
 

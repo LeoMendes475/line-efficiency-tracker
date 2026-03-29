@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f4f4f4; }
-        .navbar { background-color: #a50034; } /* Vermelho LG */
+        .navbar { background-color: #a50034; }
         .card-header { background-color: #f0f0f0; font-weight: bold; }
     </style>
 </head>
