@@ -10,7 +10,15 @@ class ProductionController extends Controller
 {
     public function index(Request $request, GetProductionDashboard $useCase)
     {
-        $selectedLines = $request->get('linha', ['todas']);
+        $selectedLines = $request->get('linha');
+
+        // Ensure $selectedLines is always an array
+        if (is_null($selectedLines)) {
+            $selectedLines = ['todas'];
+        } elseif (!is_array($selectedLines)) {
+            $selectedLines = [$selectedLines];
+        }
+
         $search = $request->get('search');
 
         if (in_array('todas', $selectedLines) || empty(array_filter($selectedLines))) {

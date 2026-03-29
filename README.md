@@ -79,6 +79,56 @@ Um dashboard de produção para monitorar linhas de produtos LG, desenvolvido co
   docker-compose exec app php artisan config:clear
   ```
 
+## Banco de Dados
+
+### Estrutura da Tabela `productions`
+
+```sql
+CREATE TABLE productions (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    product_line VARCHAR(255) NOT NULL,           -- Nome da linha (ex: TV OLED)
+    quantity_produced INT NOT NULL,               -- Quantidade total produzida
+    quantity_defects INT NOT NULL,                -- Quantidade de defeitos
+    efficiency DECIMAL(5,2) NOT NULL,             -- Eficiência (ex: 98.50)
+    production_date DATE NOT NULL,                -- Data da produção
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL
+);
+```
+
+### Dados de Exemplo
+
+Para popular a tabela com dados de exemplo, execute os seguintes comandos SQL:
+
+```sql
+-- Inserir dados de exemplo para diferentes linhas de produto
+INSERT INTO productions (product_line, quantity_produced, quantity_defects, efficiency, production_date, created_at, updated_at) VALUES
+('TV OLED 55"', 150, 3, 98.00, '2026-03-25', NOW(), NOW()),
+('TV OLED 65"', 120, 2, 98.33, '2026-03-25', NOW(), NOW()),
+('TV LED 43"', 200, 8, 96.00, '2026-03-25', NOW(), NOW()),
+('TV LED 50"', 180, 5, 97.22, '2026-03-25', NOW(), NOW()),
+('Soundbar Premium', 300, 6, 98.00, '2026-03-25', NOW(), NOW()),
+('Home Theater', 80, 4, 95.00, '2026-03-25', NOW(), NOW()),
+('TV OLED 55"', 145, 4, 97.24, '2026-03-26', NOW(), NOW()),
+('TV OLED 65"', 118, 3, 97.46, '2026-03-26', NOW(), NOW()),
+('TV LED 43"', 195, 7, 96.41, '2026-03-26', NOW(), NOW()),
+('TV LED 50"', 175, 6, 96.57, '2026-03-26', NOW(), NOW()),
+('Soundbar Premium', 290, 8, 97.24, '2026-03-26', NOW(), NOW()),
+('Home Theater', 85, 3, 96.47, '2026-03-26', NOW(), NOW()),
+('TV OLED 55"', 152, 2, 98.68, '2026-03-27', NOW(), NOW()),
+('TV OLED 65"', 125, 1, 99.20, '2026-03-27', NOW(), NOW()),
+('TV LED 43"', 205, 9, 95.61, '2026-03-27', NOW(), NOW()),
+('TV LED 50"', 182, 4, 97.80, '2026-03-27', NOW(), NOW()),
+('Soundbar Premium', 310, 5, 98.39, '2026-03-27', NOW(), NOW()),
+('Home Theater', 78, 5, 93.59, '2026-03-27', NOW(), NOW());
+```
+
+Ou utilize o seeder do Laravel:
+
+```bash
+docker-compose exec app php artisan db:seed --class=ProductionSeeder
+```
+
 ## Estrutura do Projeto
 
 - `app/` - Código da aplicação Laravel
