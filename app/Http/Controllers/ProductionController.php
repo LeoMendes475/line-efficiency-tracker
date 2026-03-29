@@ -23,6 +23,8 @@ class ProductionController extends Controller
 
         if (in_array('todas', $selectedLines) || empty(array_filter($selectedLines))) {
             $selectedLine = 'todas';
+        } elseif (count($selectedLines) === 1) {
+            $selectedLine = $selectedLines[0];
         } else {
             $selectedLine = $selectedLines;
         }
