@@ -324,7 +324,6 @@ tbody tr:hover td {
 
 @section('content')
 
-{{-- ── Search bar ── --}}
 <form method="GET" action="{{ route('dashboard') }}" class="search-bar" style="margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center;">
     <input type="text" name="search" value="{{ request('search', '') }}" placeholder="Buscar linha específica..." class="search-input" style="padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 14px; outline: none; min-width: 220px;">
     <button type="submit" class="filter-btn" style="padding: 8px 20px;">Buscar</button>
@@ -333,7 +332,6 @@ tbody tr:hover td {
     @endif
 </form>
 
-{{-- ── Filter bar ── --}}
 <div class="filter-bar">
     <span class="filter-label">Filtrar por linha:</span>
     <div class="filter-pills">
@@ -353,7 +351,6 @@ tbody tr:hover td {
     </div>
 </div>
 
-{{-- ── Summary cards ── --}}
 <div class="cards-grid">
     <div class="card" style="--card-accent: #f97316">
         <div class="card-icon">🏭</div>
@@ -386,7 +383,6 @@ tbody tr:hover td {
     </div>
 </div>
 
-{{-- ── Content: table ── --}}
 <div class="panel">
     <div class="panel-header">
         <span class="panel-title">Eficiência por linha</span>
@@ -395,7 +391,6 @@ tbody tr:hover td {
         </span>
     </div>
     <div class="table-wrap">
-        {{-- Verificamos se a variável existe e não está vazia --}}
         @if (!isset($dados) || empty($dados))
             <div class="empty">Nenhum dado encontrado para a seleção.</div>
         @else
@@ -415,13 +410,10 @@ tbody tr:hover td {
                             $barColor = $eff >= 95 ? '#22c55e' : ($eff >= 85 ? '#eab308' : '#ef4444');
                         @endphp
                         <tr>
-                            {{-- 1. Troque linha_produto por product_line --}}
                             <td class="td-linha" data-label="Linha">{{ $row['linha'] ?? 'N/A' }}</td>
 
-                            {{-- 2. Troque total_produzido por quantity_produced --}}
                             <td class="td-num" data-label="Produzido">{{ number_format($row['produzido'] ?? 0, 0, ',', '.') }}</td>
 
-                            {{-- 3. Troque total_defeitos por quantity_defects --}}
                             <td class="td-num" data-label="Defeitos">
                                 <span class="pill" style="color: #ef4444">
                                     {{ number_format($row['defeitos'] ?? 0, 0, ',', '.') }}
@@ -433,7 +425,6 @@ tbody tr:hover td {
                                     <div class="bar-track">
                                         <div class="bar-fill" style="width: {{ $eff }}%; background: {{ $barColor }};"></div>
                                     </div>
-                                    {{-- 4. Troque eficiencia por efficiency --}}
                                     <span class="bar-val" style="color: {{ $barColor }}">{{ $eff }}%</span>
                                 </div>
                             </td>
@@ -446,6 +437,6 @@ tbody tr:hover td {
     </div>
 </div>
 
-<p class="page-footer">Planta A · Dados simulados · {{ now()->format('d/m/Y') }}</p>
+<p class="page-footer">Leonardo Mendes · {{ now()->format('d/m/Y') }}</p>
 
 @endsection
